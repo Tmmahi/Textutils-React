@@ -1,25 +1,60 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import Navbar from "./components/Navbar";
+import Text from "./components/Text";
+import React, { useState } from "react";
+import Alert from "./components/Alert";
+import About from "./components/About";
+import { Routes, Route } from "react-router-dom";
+import Contact from "./components/Contact";
 
 function App() {
+  const toggleMode = () => {
+    if (mode === "light") {
+      setmode("dark");
+      document.body.style.backgroundColor = "#343a40";
+      document.body.style.color = "white";
+      showAlert('success', 'Darkmode Enabled', 'success')
+    } else {
+      setmode("light");
+      document.body.style.backgroundColor = "white";
+      document.body.style.color = "black";
+      showAlert('success', 'Lightmode Enabled', 'success')
+    }
+  };
+  const showAlert = (type, massege, title) => {
+    setalert({
+      typ: type,
+      msg: massege,
+      ttl: title
+    });
+    setTimeout(() => {
+      setalert(null);
+    }, 1000);
+  }
+  const [mode, setmode] = useState("light");
+  const [alert, setalert] = useState(null)
+  //========================================================================================  
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Navbar
+        title="TextUtils"
+        about="About"
+        mode={mode}
+        toggleMode={toggleMode}
+      />
+    <Alert alert={alert} />
+
+      <Routes>
+        <Route path="/" element={<Text mode={mode} showAlert={showAlert} />} />
+        <Route path="about" element={<About />} />
+        <Route path="contact" element={<Contact />} />
+      </Routes>
+
+    </>
   );
+
 }
+
+
 
 export default App;
